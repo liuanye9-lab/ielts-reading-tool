@@ -1,5 +1,3 @@
-// Extracted from original index.html
-
 /* ================= 核心状态区 ================= */
         let chunkIdCounter = 0;
         let lines = [];
@@ -1096,19 +1094,8 @@
                 return;
             }
 
+            // D：打开词块标签面板。原 C 快捷键已迁移到 D；逻辑连线标签快捷键已取消。
             if (key === 'd') {
-                const targetChunk = hoveredChunk || lastCreatedChunk;
-                if (targetChunk) {
-                    const relatedLines = findLinesByChunk(targetChunk);
-                    if (relatedLines.length > 0) {
-                        e.preventDefault();
-                        openLineLabelModal(relatedLines[0].id);
-                    }
-                }
-                return;
-            }
-
-            if (key === 'c') {
                 const targetChunk = hoveredChunk || lastCreatedChunk;
                 if (targetChunk) {
                     e.preventDefault();
@@ -1154,7 +1141,7 @@
             const endInLeft = leftPanel.contains(endEl);
             const isCrossPanel = startInLeft !== endInLeft;
             let options = {
-                color: type === 'mod' ? 'rgba(133, 154, 136, 0.5)' : 'rgba(186, 121, 113, 0.5)', 
+                color: type === 'mod' ? 'rgba(101, 132, 111, 0.50)' : 'rgba(147, 88, 102, 0.54)', 
                 size: 2, path: isCrossPanel ? 'grid' : 'fluid', 
                 startSocket: isCrossPanel ? (startInLeft ? 'right' : 'left') : 'bottom',
                 endSocket: isCrossPanel ? (endInLeft ? 'right' : 'left') : 'bottom',
@@ -1197,10 +1184,10 @@
         function closeLineLabelModal() { hideModal('line-label-modal'); activeLineId = null; }
 
         const lineColorsMap = {
-            '支撑': 'rgba(119, 142, 175, 0.6)', '对比/转折': 'rgba(186, 121, 113, 0.6)', 
-            '导致': 'rgba(150, 136, 161, 0.6)', '举例': 'rgba(133, 154, 136, 0.6)',      
-            '定义': 'rgba(196, 171, 126, 0.6)', '限定': 'rgba(141, 146, 150, 0.6)',      
-            '同义改写': 'rgba(189, 143, 152, 0.6)', '答案证据': 'rgba(113, 150, 159, 0.6)'   
+            '支撑': 'rgba(124, 127, 156, 0.58)', '对比/转折': 'rgba(147, 88, 102, 0.58)', 
+            '导致': 'rgba(142, 126, 154, 0.56)', '举例': 'rgba(101, 132, 111, 0.56)',      
+            '定义': 'rgba(168, 148, 120, 0.56)', '限定': 'rgba(129, 132, 134, 0.54)',      
+            '同义改写': 'rgba(159, 119, 132, 0.58)', '答案证据': 'rgba(104, 133, 142, 0.58)'   
         };
 
         function applyLineLabel(label) {
@@ -1274,3 +1261,28 @@
         function startTimer() { timeRemaining = parseInt(document.getElementById('timer-input').value) * 60; const btn = document.getElementById('timer-btn'); btn.classList.add('text-morandi-primary', 'bg-morandi-primary/10'); updateTimerDisplay(); timerInterval = setInterval(() => { timeRemaining--; if(timeRemaining <= 0) { stopTimer(); alert("专注时间到，放松一下眼睛吧！"); } else updateTimerDisplay(); }, 1000); closeTimerModal(); }
         function stopTimer() { clearInterval(timerInterval); timerInterval = null; document.getElementById('timer-display').innerText = "番茄钟"; document.getElementById('timer-btn').classList.remove('text-morandi-primary', 'bg-morandi-primary/10'); }
         function updateTimerDisplay() { let m = Math.floor(timeRemaining / 60).toString().padStart(2, '0'); let s = (timeRemaining % 60).toString().padStart(2, '0'); document.getElementById('timer-display').innerText = `${m}:${s}`; }
+
+
+/* --- Welcome screen --- */
+function enterProgram() {
+    const screen = document.getElementById('welcome-screen');
+    if (!screen) return;
+    screen.classList.add('is-leaving');
+    setTimeout(() => { screen.style.display = 'none'; }, 360);
+}
+
+function openGuideFromWelcome() {
+    enterProgram();
+    setTimeout(() => openGuideModal(), 240);
+}
+
+function openTongzhuoSite() {
+    window.open('https://ielts.itongzhuo.com/business/ielts/student/jumpSingleReport.do?sSubjects=1&sId=594&type=4', '_blank', 'noopener');
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+    const welcomeScreen = document.getElementById('welcome-screen');
+    if (welcomeScreen) {
+        requestAnimationFrame(() => welcomeScreen.classList.add('is-visible'));
+    }
+});
