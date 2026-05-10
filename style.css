@@ -1177,3 +1177,139 @@ kbd {
   border: 1px solid rgba(255,255,255,0.50) !important;
 }
 
+
+/* --- Patch: 强化 D 词块论证标签的可读性与视觉层级 --- */
+:root {
+  --label-ink-strong: #f8f5ed;
+  --label-bg-strong: rgba(47, 43, 38, 0.94);
+  --label-bg-strong-2: rgba(31, 28, 24, 0.96);
+  --label-border-strong: rgba(255, 255, 255, 0.30);
+  --label-shadow-strong: 0 14px 34px rgba(45, 40, 34, 0.28), inset 0 1px 0 rgba(255,255,255,0.20);
+}
+
+.chunk[data-label] {
+  position: relative !important;
+  z-index: 12 !important;
+  box-decoration-break: clone !important;
+  -webkit-box-decoration-break: clone !important;
+}
+
+.chunk[data-label]::before {
+  content: attr(data-label) !important;
+  position: absolute !important;
+  top: -2.75em !important;
+  left: -0.15em !important;
+  z-index: 90 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  min-width: 2.8em !important;
+  padding: 5px 12px 5px 12px !important;
+  border-radius: 999px !important;
+  background: linear-gradient(180deg, var(--label-bg-strong), var(--label-bg-strong-2)) !important;
+  color: var(--label-ink-strong) !important;
+  border: 1px solid var(--label-border-strong) !important;
+  box-shadow: var(--label-shadow-strong) !important;
+  backdrop-filter: blur(24px) saturate(108%) contrast(108%) !important;
+  -webkit-backdrop-filter: blur(24px) saturate(108%) contrast(108%) !important;
+  font-size: 12.5px !important;
+  font-weight: 900 !important;
+  letter-spacing: 0.055em !important;
+  line-height: 1.12 !important;
+  white-space: nowrap !important;
+  text-shadow: 0 1px 1px rgba(0,0,0,0.32) !important;
+  pointer-events: none !important;
+}
+
+.chunk[data-label]::after {
+  content: '' !important;
+  display: block !important;
+  position: absolute !important;
+  top: -0.66em !important;
+  left: 0.55em !important;
+  width: 8px !important;
+  height: 8px !important;
+  z-index: 89 !important;
+  background: var(--label-bg-strong-2) !important;
+  border-right: 1px solid var(--label-border-strong) !important;
+  border-bottom: 1px solid var(--label-border-strong) !important;
+  transform: rotate(45deg) !important;
+  pointer-events: none !important;
+}
+
+#chunk-label-modal .relative.z-10 {
+  background: linear-gradient(145deg, rgba(248,247,242,0.76), rgba(232,228,219,0.52)) !important;
+}
+
+#chunk-label-modal h3 {
+  color: #302c26 !important;
+  font-weight: 850 !important;
+  letter-spacing: -0.01em !important;
+}
+
+#chunk-label-modal .grid button {
+  color: #302c26 !important;
+  font-weight: 820 !important;
+  background: rgba(250,248,242,0.70) !important;
+  border: 1px solid rgba(255,255,255,0.72) !important;
+  box-shadow: 0 10px 24px rgba(78,74,67,0.08), inset 0 1px 0 rgba(255,255,255,0.72) !important;
+}
+
+#chunk-label-modal .grid button:hover {
+  transform: translateY(-1px) !important;
+  color: #1f1c18 !important;
+  background: rgba(255,255,255,0.86) !important;
+  border-color: rgba(95,88,77,0.22) !important;
+  box-shadow: 0 16px 36px rgba(78,74,67,0.12), inset 0 1px 0 rgba(255,255,255,0.82) !important;
+}
+
+/* --- Patch: D 词块论证标签改为内联胶囊，避免遮挡原文 --- */
+.chunk[data-label] {
+  position: relative !important;
+  z-index: 3 !important;
+  padding-right: 0.12em !important;
+  box-decoration-break: clone !important;
+  -webkit-box-decoration-break: clone !important;
+}
+
+/* 取消上一版悬浮在文字上方的标签，避免压住上一行或原文 */
+.chunk[data-label]::before {
+  content: none !important;
+  display: none !important;
+}
+
+/* 改为跟随文本流的内联标签：不绝对定位，不覆盖正文 */
+.chunk[data-label]::after {
+  content: attr(data-label) !important;
+  display: inline-flex !important;
+  position: static !important;
+  width: auto !important;
+  height: auto !important;
+  z-index: auto !important;
+  margin-left: 0.42em !important;
+  padding: 2px 6px 2.5px !important;
+  border-radius: 999px !important;
+  vertical-align: 0.18em !important;
+  transform: none !important;
+  background: linear-gradient(180deg, rgba(56, 52, 46, 0.92), rgba(37, 34, 30, 0.94)) !important;
+  color: #f7f2e8 !important;
+  border: 1px solid rgba(255,255,255,0.26) !important;
+  box-shadow: 0 5px 12px rgba(40, 36, 31, 0.16), inset 0 1px 0 rgba(255,255,255,0.18) !important;
+  font-size: 10px !important;
+  font-weight: 850 !important;
+  letter-spacing: 0.045em !important;
+  line-height: 1 !important;
+  white-space: nowrap !important;
+  text-shadow: 0 1px 1px rgba(0,0,0,0.22) !important;
+  pointer-events: none !important;
+}
+
+/* 窄屏进一步缩小，保持阅读行距稳定 */
+@media (max-width: 768px) {
+  .chunk[data-label]::after {
+    font-size: 9px !important;
+    padding: 1.8px 5px 2px !important;
+    margin-left: 0.32em !important;
+    vertical-align: 0.14em !important;
+  }
+}
